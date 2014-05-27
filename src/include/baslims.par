@@ -22,7 +22,7 @@ C     NHT     - Maximum angular momentum
 
 C     MAXATM  - Maximum number of atoms
       INTEGER    MAXATM
-      PARAMETER (MAXATM=1000)
+      PARAMETER (MAXATM=1100)
 
 C     MXTNPR  - Maximum total number of primitives for all symmetry
 C               inequivalent centers.

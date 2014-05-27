@@ -1,13 +1,18 @@
  
        integer maxfrag, maxapf, maxsegs 
-       parameter (maxfrag = 1000)  
+       parameter (maxfrag = 1100)  
        parameter (maxapf  = 100)  
        parameter (maxsegs = 10000)  
         
        logical frag_calc
        integer nfrags, natoms_frag, watom_frag
-       common /FRAGDEF/frag_calc, nfrags, natoms_frag(maxfrag),
+       double precision r_thresh 
+       common /FRAGDEF/frag_calc, nfrags, 
+     *                natoms_frag(maxfrag),
      *                watom_frag(maxfrag,maxapf) 
+     *
+
+       common /FRAG_THRESH/r_thresh 
  
        integer fragAO, n_occ, n_aocc, n_bocc, n_virt, n_avirt, n_bvirt
        common /FORBS/fragAO(maxfrag), 

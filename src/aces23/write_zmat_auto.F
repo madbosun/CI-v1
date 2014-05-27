@@ -306,7 +306,7 @@ c        go to 800
       endif
 c     go to 700
       if (frag_calc) then 
-         read(23,*) nfrags 
+         read(23,*) nfrags, r_thresh 
          read(23,*) (natoms_frag(i), i=1, nfrags) 
          do i = 1, nfrags 
             read(23,*) (watom_frag(i,j), j=1, natoms_frag(i)) 

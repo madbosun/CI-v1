@@ -777,6 +777,8 @@ c Set the parameters defining the fragment calculation.
 c *************************************************************************
       if (.not. frag_calc) nfrags = 0  
       call set_constant('nfrags'//C_NULL_CHAR,nfrags) 
+      call set_scalar('nfrags'//C_NULL_CHAR,nfrags) 
+      call set_scalar('r_thresh'//C_NULL_CHAR,r_thresh) 
 
       write(6,*) ' NFRAGS = ', nfrags 
       if (frag_calc) then 
