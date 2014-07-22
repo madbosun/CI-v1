@@ -18,20 +18,32 @@ c
       integer nocci, nvirti, norbi, nproci  
       real*8 nocc, nvirt, norb, nproc  
 
-      integer k, nmin, nmax, nb, wb(1000)  
+      integer k, nmin, nmax, nb, wb(30000)  
       integer nseg, neff, rem, best, rem_min   
       integer o_seg,v_seg,n_seg 
+
+      include 'frag_def.h'
 
       nocc = nocci
       nvirt = nvirti
       norb = norbi
       nproc = nproci
+
+      write(6,*) ' NOCC NVIRT NORB:', nocci, nvirti, norbi 
 c
 c norb segmentation
 c ----------------- 
 c
       nmin = 20 
       nmax = 40 
+
+c If frag calc just choose reasonable values 
+c     if (frag_calc) then 
+c        o_seg = 25 
+c        v_seg = 25 
+c        n_seg = 35 
+c        return 
+c     endif 
 
 c----------------------------------------------------------------------------
 c   Handle tiny jobs appropriately.
@@ -90,6 +102,7 @@ c
 c
       enddo 
 20    continue 
+      write(6,*) ' N_SEG :', n_seg 
 c
 c ckeck if you like the result 
 c ---------------------------- 
@@ -106,6 +119,7 @@ c
       enddo 
 
 200   continue 
+      write(6,*) ' N_SEG after refinement  :', n_seg 
 c
 c nvirt segmentation
 c ------------------ 
@@ -159,6 +173,7 @@ c
 c
       enddo 
 10    continue 
+      write(6,*) ' V_SEG :', v_seg 
 c
 c ckeck if you like the result 
 c ---------------------------- 
@@ -175,6 +190,7 @@ c
       enddo 
 
 100   continue 
+      write(6,*) ' V_SEG after refinement :', v_seg 
 c
 c nocc segmentation
 c ------------------ 
@@ -228,6 +244,7 @@ c
 c
       enddo 
 30    continue 
+      write(6,*) ' O_SEG :', O_seg 
 c
 c ckeck if you like the result 
 c ---------------------------- 
@@ -244,6 +261,8 @@ c
       enddo 
 
 300   continue 
+      write(6,*) ' O_SEG after refinement :', O_seg 
+      write(6,*) ' SEGMENTS :', n_seg, o_seg, v_seg 
 c
 c   Attempt to improve segmentation.
 c

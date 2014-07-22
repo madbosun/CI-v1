@@ -369,7 +369,9 @@ c------------------------------------------------------------------------------
          call abort_job()
       endif
 
+      write(6,*) 'Calling gentranmat' 
       call gentranmat(iz(ixz), gentranmat_ints)
+      write(6,*) 'Done Calling gentranmat' 
 
 c---------------------------------------------------------------------------
 c   Free any heap memory that might have been used.  It must be made

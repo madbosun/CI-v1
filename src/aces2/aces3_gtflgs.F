@@ -211,7 +211,7 @@ c EXTERNAL FUNCTIONS
 c INTERNAL VARIABLES
       integer i, j
 c     value tokens of arrays
-      INTEGER nOcc(8,2),nDrop(2),iDrop(1000,2),iArr(1000)
+      INTEGER nOcc(8,2),nDrop(2),iDrop(5000,2),iArr(5000)
       INTEGER EARoot(8,2), IPRoot(8,2), EERoot(8,3)
 c     absolute file names from gfname
       CHARACTER*(fnamelen) FNAME
@@ -342,7 +342,7 @@ c   o initialize the occupation values
       enddo
 
 c   o initialize the dropmo values
-      do i = 1, 2000
+      do i = 1, 5000
          iDrop(i,1) = 0
       enddo
 
@@ -834,7 +834,7 @@ c         o MN_A3 symmetry arrays
 
 c         o DROPMO
             if (iASV.eq.h_IOPPAR_dropmo) then
-               call parse_set_iarr(szData(1:ValueSize),j,iDrop,2000)
+               call parse_set_iarr(szData(1:ValueSize),j,iDrop,5000)
                nDrop(1) = j
                ioppar(h_IOPPAR_dropmo) = j
                goto 101
@@ -842,7 +842,7 @@ c         o DROPMO
 
 c         o FD_IRREPS
             if (iASV.eq.h_IOPPAR_fd_irreps) then
-               call parse_set_iarr(szData(1:ValueSize),j,iArr,1000)
+               call parse_set_iarr(szData(1:ValueSize),j,iArr,5000)
                call iputrec(20,'JOBARC','NFDIRREP',1,j)
                call iputrec(20,'JOBARC','FDIRREP ',j,iArr)
                ioppar(h_IOPPAR_fd_irreps) = j
@@ -871,20 +871,20 @@ c         o ESTATE_SYM
 
 c         o QRHF orbital arrays
             if (iASV.eq.h_IOPPAR_qrhf_gen) then
-               call parse_set_iarr(szData(1:ValueSize),j,iArr,1000)
+               call parse_set_iarr(szData(1:ValueSize),j,iArr,5000)
                call iputrec(20,'JOBARC','QRHFTOT ',1,j)
                call iputrec(20,'JOBARC','QRHFIRR ',j,iArr)
                ioppar(h_IOPPAR_qrhf_gen) = j
                goto 101
             end if
             if (iASV.eq.h_IOPPAR_qrhf_orb) then
-               call parse_set_iarr(szData(1:ValueSize),j,iArr,1000)
+               call parse_set_iarr(szData(1:ValueSize),j,iArr,5000)
                call iputrec(20,'JOBARC','QRHFLOC ',j,iArr)
                ioppar(h_IOPPAR_qrhf_orb) = j
                goto 101
             end if
             if (iASV.eq.h_IOPPAR_qrhf_spin) then
-               call parse_set_iarr(szData(1:ValueSize),j,iArr,1000)
+               call parse_set_iarr(szData(1:ValueSize),j,iArr,5000)
                call iputrec(20,'JOBARC','QRHFSPN ',j,iArr)
                ioppar(h_IOPPAR_qrhf_spin) = j
                goto 101

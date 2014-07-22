@@ -47,6 +47,7 @@ c-------------------------------------------------------------------------
          print *,'Running initial xjoda...'
          call c_flush_stdout()
 
+         write(6,*) ' Entering joda_main' 
          call joda_main()
          print *,'Initial xjoda is complete...'
          call c_flush_stdout()
@@ -58,12 +59,15 @@ c         lindep_tol = 9
 
       endif
 
+      write(6,*) ' Done jobarc inquiry' 
 c---------------------------------------------------------------------------
 c   Initialize ACES routines.
 c---------------------------------------------------------------------------
                                                                                 
       call aces_init_rte()
+      write(6,*) ' Done aces_init_rte' 
       call aces_ja_init()
+      write(6,*) ' Done aces_ja_init' 
 
 c----------------------------------------------------------------------------
 c   xjoda sometimes destroys the OCCUPYA0, OCCUPYB0 data on JOBARC for 

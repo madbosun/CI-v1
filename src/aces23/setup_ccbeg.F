@@ -25,7 +25,7 @@ c---------------------------------------------------------------------------
       integer ncfps(*), npfps(*), ixalpha(*), ixpcoeff(*)
       integer nalpha, npcoeff
       double precision alpha(*), pcoeff(*)
-      integer ccbeg(*), ccend(*), indx_cc(nshells)
+      integer ccbeg(*), ccend(*), indx_cc(*)
       integer i, j, ishell
       integer k, l, icc
 

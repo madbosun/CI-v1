@@ -149,6 +149,7 @@ c         CALL INSMEM("GENTRANMAT", ITOP, MAXCOR)
           call abort_job()
       ENDIF
 C
+      write(6,*) ' Entering BLTAOTOSO' 
       CALL BLTAOTOSO(Scr(I000),Scr(I010),Scr(I020),Scr(I030),Scr(I040),
      &               Scr(I050),Scr(I060),Scr(I070),Scr(I080),Scr(I090),
      &               Scr(I100),Scr(I110),Scr(I120),Scr(I130),Scr(I140),
@@ -156,6 +157,7 @@ C
      &               Scr(I200),Scr(I210),Scr(I220),Scr(I230),Scr(I240),
      &               Scr(I250),Scr(I260),Scr(I270),MAXFNC,
      &               NHT,KWD,NH4,Scr(I280),Scr(I290),Scr(I300))
+      write(6,*) ' Done BLTAOTOSO' 
 C
       RETURN
       END

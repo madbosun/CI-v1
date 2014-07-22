@@ -287,27 +287,28 @@ c---------------------------------------------------------------------------
          enddo
       endif 
       
-      call mem_alloc(dbuf, nscfa, bytes_per_double, iscfa, 
-     *               .true., ierr)
-      if (ierr .ne. 0) then
-         print *,'mem_alloc for eigenvectors failed: nscfa = ',
-     *     nscfa
-         call abort_job()
-      endif
+CVFLSKIP 
+c     call mem_alloc(dbuf, nscfa, bytes_per_double, iscfa, 
+c    *               .true., ierr)
+c     if (ierr .ne. 0) then
+c        print *,'mem_alloc for eigenvectors failed: nscfa = ',
+c    *     nscfa
+c        call abort_job()
+c     endif
 
-      if ((.not. if_scf) .and. .not. dryrun) then
-         call dgetrec(1, 'JOBARC', 'SCFEVCA0', nscfa, dbuf(iscfa))
+c     if ((.not. if_scf) .and. .not. dryrun) then
+c        call dgetrec(1, 'JOBARC', 'SCFEVCA0', nscfa, dbuf(iscfa))
 
 c-------------------------------------------------------------------------
 c   For ROHF, read in the FOCKA array.
 c-------------------------------------------------------------------------
 
-         if (iuhf .eq. 2) then   ! ROHF
-            call mem_alloc(dbuf, nscfa, bytes_per_double,
-     *                               ifockrohfa, .true., ierr)
-            call dgetrec(1,'JOBARC','FOCKA', nscfa, dbuf(ifockrohfa))
-         endif   ! ROHF
-      endif
+c        if (iuhf .eq. 2) then   ! ROHF
+c           call mem_alloc(dbuf, nscfa, bytes_per_double,
+c    *                               ifockrohfa, .true., ierr)
+c           call dgetrec(1,'JOBARC','FOCKA', nscfa, dbuf(ifockrohfa))
+c        endif   ! ROHF
+c     endif
 
       if ((.not. if_scf) .and. .not. dryrun) then
          call dgetrec(0, 'JOBARC', 'SCFEVLA0', nepsa, dummy) 
@@ -379,92 +380,99 @@ c-----------------------------------------------------------------------------
          uhf = .true.
       endif
 
-      call mem_alloc(dbuf, nscfb, bytes_per_double, iscfb, 
-     *                 .true., ierr)
-      if (ierr .ne. 0) then
-         print *,'mem_alloc for beta eigenvectors fialed: nscfb ',
-     *     nscfb
-         call abort_job()
-      endif
+CVFLSKIP 
+c     call mem_alloc(dbuf, nscfb, bytes_per_double, iscfb, 
+c    *                 .true., ierr)
+c     if (ierr .ne. 0) then
+c        print *,'mem_alloc for beta eigenvectors fialed: nscfb ',
+c    *     nscfb
+c        call abort_job()
+c     endif
 
-      if (iuhf .eq. 2)
-     *     call mem_alloc(dbuf, nscfb, bytes_per_double,
-     *                                ifockrohfb, .true., ierr)
+c     if (iuhf .eq. 2)
+c    *     call mem_alloc(dbuf, nscfb, bytes_per_double,
+c    *                                ifockrohfb, .true., ierr)
 
-      if ((.not. if_scf) .and. uhf .and. .not. dryrun) then
+c     if ((.not. if_scf) .and. uhf .and. .not. dryrun) then
 
 c--------------------------------------------------------------------------
 c  Read beta eigenvectors from JOBARC.
 c--------------------------------------------------------------------------
 
-         call dgetrec(1, 'JOBARC', 'SCFEVCB0', nscfb, dbuf(iscfb))
+CVFLSKIP 
+c        call dgetrec(1, 'JOBARC', 'SCFEVCB0', nscfb, dbuf(iscfb))
 
-         if (iuhf .eq. 2) then   ! ROHF
-            call dgetrec(1,'JOBARC','FOCKB', nscfb, dbuf(ifockrohfb))
-         endif    ! ROHF
-      else
+c        if (iuhf .eq. 2) then   ! ROHF
+c           call dgetrec(1,'JOBARC','FOCKB', nscfb, dbuf(ifockrohfb))
+c        endif    ! ROHF
+c     else
 
 c--------------------------------------------------------------------------
 c   Copy alpha eigenvectors into the beta eigenvectors.
 c--------------------------------------------------------------------------
 
-         do i = 1, nscfa
-            dbuf(iscfb+i-1) = dbuf(iscfa+i-1)
-         enddo
-      endif
+c        do i = 1, nscfa
+c           dbuf(iscfb+i-1) = dbuf(iscfa+i-1)
+c        enddo
+c     endif
+      write(6,*) ' 1 ' 
 
-      if ((.not. if_scf) .and. uhf .and. .not. dryrun) then
+c     if ((.not. if_scf) .and. uhf .and. .not. dryrun) then
 
 c---------------------------------------------------------------------------
 c   Read number of beta eigenvalues from JOBARC.
 c---------------------------------------------------------------------------
 
-         call dgetrec(0, 'JOBARC', 'SCFEVLB0', nepsb, dummy)
+c        call dgetrec(0, 'JOBARC', 'SCFEVLB0', nepsb, dummy)
 
-         if (nepsb .lt. 0) then
-             print *,'Error: ACES JOBARC file does not contain ',
-     *           'SCFEVLB0 data.'
-             call abort_job()
-         endif
-      else
-         nepsb = nbasis 
-      endif
+c        if (nepsb .lt. 0) then
+c            print *,'Error: ACES JOBARC file does not contain ',
+c    *           'SCFEVLB0 data.'
+c            call abort_job()
+c        endif
+c     else
+c        nepsb = nbasis 
+c     endif
 
-      call mem_alloc(dbuf, nepsb, bytes_per_double, iepsb, 
-     *                  .true., ierr)
-      if (ierr .ne. 0) then
-         print *,'mem_alloc for beta eigenvalues failed: nscfb ',nscfb
-         call abort_job()
-      endif
+c     call mem_alloc(dbuf, nepsb, bytes_per_double, iepsb, 
+c    *                  .true., ierr)
+c     if (ierr .ne. 0) then
+c        print *,'mem_alloc for beta eigenvalues failed: nscfb ',nscfb
+c        call abort_job()
+c     endif
+c     write(6,*) ' 2 ' 
 
-      if ((.not. if_scf) .and. uhf .and. .not. dryrun) then
+c     if ((.not. if_scf) .and. uhf .and. .not. dryrun) then
 
 c---------------------------------------------------------------------------
 c   Read actual beta-spin eigenvalues from JOBARC.
 c---------------------------------------------------------------------------
 
-         call dgetrec(1, 'JOBARC', 'SCFEVLB0', nepsb, dbuf(iepsb))
-      else
+c        call dgetrec(1, 'JOBARC', 'SCFEVLB0', nepsb, dbuf(iepsb))
+c     else
 
 c--------------------------------------------------------------------------
 c   Copy alpha-spin eigenvalues into beta-spin eigenvalues.
 c--------------------------------------------------------------------------
 
-         do i = 1, nepsb
-            dbuf(iepsb+i-1) = dbuf(iepsa+i-1)
-         enddo
-      endif
+c        do i = 1, nepsb
+c           dbuf(iepsb+i-1) = dbuf(iepsa+i-1)
+c        enddo
+c     endif
 
-      if ((.not. if_scf) .and. uhf .and. .not. dryrun) then
-         call igetrec(1, 'JOBARC', 'OCCUPYB0', 1, nbeta_occupied)
-      endif
+c     if ((.not. if_scf) .and. uhf .and. .not. dryrun) then
+c        call igetrec(1, 'JOBARC', 'OCCUPYB0', 1, nbeta_occupied)
+c     endif
+      write(6,*) ' 3 ' 
 
 CDEBUG      call read_basis_info('CHSSI.MOL', ncenters, ncenters, npop, 
+6767  continue 
       call read_basis_info('MOL', ncenters, ncenters, npop, 
      *           ireorder, cartesian, itfct, lnp1, lnpo, nfct, 
      *           nbasis, dbuf(ialpha), ixalpha, 
      *           dbuf(ipcoeff), ixpcoef, atmnam, 
      *           dbuf(master_icoord), naoatm)
+      write(6,*) ' Done reading basis info ' 
  
 c-------------------------------------------------------------------------
 c   If the SCF has already been performed check if MOs are to be dropped.
@@ -474,6 +482,7 @@ c-------------------------------------------------------------------------
       nbeta_virtual  = nbasis - nbeta_occupied 
 
       write(6,*) ' NALPHA_VIRT =' , nalpha_virtual 
+      return
       write(6,*) ' NBETA_VIRT =' , nbeta_virtual 
       
       if (.not. ignore_dropmo) then

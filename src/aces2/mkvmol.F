@@ -82,7 +82,7 @@ C     it to act like it encountered a real error on reading the file.
       Character*3 Ka(3)
       Character*6 Slask,NullSt
       Character*1 Lb
-      Character*1 Indxx(150)
+      Character*1 Indxx(5000)
 
 cYAU - parse ZMAT like fetchz()
       integer izl(2,7)
@@ -147,7 +147,7 @@ C
      &,'B','C','D','E','F','G','H','I','J','K','L','M','N'
      &,'O','P','Q','R','S','T','U','V','W','X','Y','Z','a'
      &,'b','c','d','e','f','g','h','i','j','k','l','m','n'
-     &,'o','p','q','r','s','t','u','v','w','x','y','z',88*'*'/
+     &,'o','p','q','r','s','t','u','v','w','x','y','z',4938*'*'/
 
 csb
 csb      DATA BASIS /'PBS     ','STO-3G  ','DZ      ',

@@ -227,6 +227,7 @@ c---------------------------------------------------------------------------
          enddo 
       endif
  
+      write(6,*) ' Done int_gen_init ' 
       return
 c     end subroutine int_gen_init
       end

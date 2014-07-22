@@ -331,7 +331,7 @@ C
      I            '7g1+', '7d2-', '7d1+', '7d0 ', '7g3-', '7d2+',
      I            '7g1-', '7g0 ', '7d1-', '7s  '/
       DATA IBLNK/'      '/
-      DATA NCMAX /1000/
+      DATA NCMAX /10000/
 C
 C...  STATEMENT FUNCTIONS
 C
@@ -345,6 +345,7 @@ C
       else
          OPEN(UNIT=INU,FILE='MOL',FORM='FORMATTED',STATUS='OLD')
       endif
+      write(6,*) ' MOL file opened' 
       OPEN(UNIT=LUSCR,FILE='VMSCR1',FORM='UNFORMATTED',STATUS='UNKNOWN')
 C
       IPRINT = IFLAGS(1)
@@ -384,6 +385,7 @@ C
       READ(INU,83383) SLASK,IGENER,IF10,IF18,IECP,IECPU,IJUNK,
      &                INUTMP,ISTATS,NHARM,IDELA,IDELB,IBORTH
 83383 FORMAT(A6,4X,12I5)
+      write(6,*) ' MOL file first line read' 
 C
       IF (SLASK .EQ. 'SUPMAT') THEN
          WRITE(6,88777) 
@@ -406,6 +408,7 @@ C
       IF(IPRINT.GE.1)LPRT = .TRUE.
 C
       READ(INU, 833) TITLE
+      write(6,*) ' Readin MOL title' 
   833 FORMAT (9A8)
 C
 C-----------------------------------------------------------------------
@@ -416,9 +419,11 @@ C-----------------------------------------------------------------------
       READ(INU,8800) NONTYP, NSYMOP, ((KKA(J,I),I=1,3),J=1,3),
      1              TLA,  TLC, ID3, IRSTRT
 8800  FORMAT(2I5,9A1,1X,E10.2,E10.2,I5,I5)
+      write(6,*) ' Readin MOL types ect...' 
 C
       IF (TLC.eq.0.0) TLC=0.1*TLA
       READ(INU,180)TIML,SAFL
+      write(6,*) ' Readin MOL 180' 
  180  FORMAT (2F10.5)
 C
 C-----------------------------------------------------------------------
@@ -544,6 +549,7 @@ C-----------------------------------------------------------------------
 C
          READ(INU,11) KASET, Q,NONT,IQM,(JCO(J),J=1,IQM), IGENES
  11      FORMAT (A6,F14.8,12I5)
+      write(6,*) ' Readin MOL 11' 
          LUBAS = INU
          IQM4 = MAX0(IQM,1)
          NMIN=NMAX+1
@@ -562,10 +568,15 @@ C
             CALL ERREX
 C
  113        IFBA(NMAX) = IQM
+      write(6,*) ' Start Readin MOL 12' 
             READ(INU,12)NAMN(NMAX),(CORD(NMAX,J),J=1,3),IDX
+      write(6,12) NAMN(NMAX),(CORD(NMAX,J),J=1,3),IDX
+      write(6,*) ' End Readin MOL 12' 
  12         FORMAT (A4,3F20.12,I5)
             IF (IDX .EQ. 0) GO TO 115
+      write(6,*) ' Start Readin MOL 30' 
             READ(INU,30)(CORD(NMAX,J),J=1,3)
+      write(6,*) ' Don Readin MOL 30' 
  30         FORMAT (3F20.5)
  115        CONTINUE
 C
@@ -606,6 +617,7 @@ C-----------------------------------------------------------------------
                      READ(LUBAS,13) NUC(J,K), NRC(J,K)
                   ELSE
                      READ(INU,13) NUC(J,K), NRC(J,K)
+      write(6,*) ' Readin MOL 13' 
                   ENDIF
                ENDIF
 C
@@ -656,9 +668,11 @@ C
                            IF (IF10 .EQ. 1) THEN
                               READ(INU,211) A(IMIN-1+LL),
      &                                     (CTEMP(LL,MC),MC=1,NRC(J,K))
+      write(6,*) ' Readin MOL 211' 
                            ELSE
                               READ(INU,14) A(IMIN-1+LL), 
      &                                     (CTEMP(LL,MC),MC=1,NRC(J,K))
+      write(6,*) ' Readin MOL 14' 
                            ENDIF
                         ENDIF
                      ELSE
@@ -667,16 +681,19 @@ C
 C
                         READ(INU,14) A(IMIN-1+LL), 
      &                              (CTEMP(LL,MC),MC = 1,NRC(J,K))
+      write(6,*) ' Readin MOL 14 again' 
                         GO TO 88215
 C
 88210                   CONTINUE
                         READ(INU,211) A(IMIN-1+LL), 
      &                               (CTEMP(LL,MC),MC = 1,NRC(J,K))
+      write(6,*) ' Readin MOL 211 again' 
                         GO TO 88215
 C
 88212                   CONTINUE
                         READ(INU,213) A(IMIN-1+LL), 
      &                                (CTEMP(LL,MC),MC = 1,NRC(J,K))
+      write(6,*) ' Readin MOL 213 again' 
 C
 88215                   CONTINUE
                      ENDIF
@@ -791,7 +808,7 @@ C Load up exponents of primitives.
 C-----------------------------------------------------------------------
             IF(LMAX+IMAX .GT. MXTNPR)THEN
                WRITE(6,*)' @READIN-F, Too many primitives. Limit is ',
-     &                   MXTNPR
+     &                   MXTNPR, 'YOU HAVE', LMAX, IMAX, ':', LMAX+IMAX
                CALL ERREX
             ENDIF
 C

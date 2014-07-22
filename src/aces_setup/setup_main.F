@@ -24,7 +24,7 @@ c      program setup_main
 
       integer max_segments, mxcbf  
       parameter (max_segments = 1000000)
-      parameter (mxcbf = 10000) 
+      parameter (mxcbf = 30000) 
 c      parameter (max_segments = 10000)
 c      parameter (mxcbf = 500) 
       integer (C_INT) nfocc 
@@ -125,6 +125,7 @@ c      call init_setup('jobf10July'//C_NULL_CHAR)
       call aces_init_rte() 
 
       call init_params('ZMAT') 
+      write(6,*) ' Done initializing parameters from ZMAT' 
 
       maxmem = 0 
       call igetparam('MAXMEM', 1, maxmem) 
@@ -138,9 +139,12 @@ c      call init_setup('jobf10July'//C_NULL_CHAR)
           print *,'MEMORY ALLOCATION Sucessfull: maxmem = ',maxmem
       endif
 
+      write(6,*) ' Entering scf_init' 
       call scf_init(vnn) 
+      write(6,*) ' Done scf_init' 
 
       call verify_aces2_params()
+      write(6,*) ' Done verifying aces2_params' 
       call write_zmat_auto(jobflow)
       call aces_ja_fin() 
       call init_params('ZMAT.AUTO') 
@@ -502,6 +506,14 @@ c-------------------------------------------------------------------------------
       call set_constant('scf_hist'//C_NULL_CHAR, val0)   ! Number of histories to use in the SCF DIIS  
       call set_constant('fromvar'//C_NULL_CHAR, nd)      ! ????  
 
+      val0 = eom_tol
+      call set_constant('eom_tol'//C_NULL_CHAR, val0)     ! eom convergence threshold
+      val0 = eom_roots
+      call set_constant('eom_roots'//C_NULL_CHAR, val0)   ! number of EOM roots
+      val0 = eom_roots*3
+      call set_constant('eom_subspc'//C_NULL_CHAR, val0)  ! size of davidson subspace collapse 
+
+
       write(6,*) ' Done setting integer constants ' 
 
 c     if (ignore_dropmo) then 
@@ -778,6 +790,7 @@ c *************************************************************************
       if (.not. frag_calc) nfrags = 0  
       call set_constant('nfrags'//C_NULL_CHAR,nfrags) 
       call set_scalar('nfrags'//C_NULL_CHAR,nfrags) 
+      call set_constant('r_thresh'//C_NULL_CHAR,r_thresh) 
       call set_scalar('r_thresh'//C_NULL_CHAR,r_thresh) 
 
       write(6,*) ' NFRAGS = ', nfrags 
