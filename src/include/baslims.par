@@ -9,7 +9,7 @@ c VMOL PARAMETERS ------------------------------------------------------
 
 C     MAXPRIM - Maximum number of primitives for a given shell.
       INTEGER    MAXPRIM
-      PARAMETER (MAXPRIM=150) ! VFL was 72 
+      PARAMETER (MAXPRIM=250) ! VFL was 72 
 
 C     MAXFNC  - Maximum number of contracted functions for a given shell.
 C               (vmol/readin requires this to be the same as MAXPRIM)
@@ -22,7 +22,7 @@ C     NHT     - Maximum angular momentum
 
 C     MAXATM  - Maximum number of atoms
       INTEGER    MAXATM
-      PARAMETER (MAXATM=1100)
+      PARAMETER (MAXATM=3000)
 
 C     MXTNPR  - Maximum total number of primitives for all symmetry
 C               inequivalent centers.

@@ -147,6 +147,7 @@ C
                IERR = 1
             END IF
          END IF
+            WRITE (6,*) 'VFL:',I,ZSYM(I),IATNUM(I),ATMASS(I)
          IF (IPRNT .GE.10)
      $      WRITE (LuOut,9010) I,ZSYM(I),IATNUM(I),ATMASS(I)
  9010    FORMAT(I3,2X,A5,2X,I5,2X,F10.5)

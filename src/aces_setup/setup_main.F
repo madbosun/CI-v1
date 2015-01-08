@@ -24,7 +24,7 @@ c      program setup_main
 
       integer max_segments, mxcbf  
       parameter (max_segments = 1000000)
-      parameter (mxcbf = 30000) 
+      parameter (mxcbf = 300000) 
 c      parameter (max_segments = 10000)
 c      parameter (mxcbf = 500) 
       integer (C_INT) nfocc 
@@ -69,7 +69,7 @@ c     integer (C_INT) indx_cc(max_shells)
       character*5 lformat
       character*5 lstring
 
-      integer i, j, kfrag 
+      integer i, j, m, n, kfrag 
       integer icc 
       integer segs(maxsegs)   
       integer saveocc 
@@ -78,6 +78,7 @@ c     integer (C_INT) indx_cc(max_shells)
       integer auto_seg_switch 
       integer m_segs 
       integer n_a_occ, n_b_occ, n_a_virt, n_b_virt 
+      integer max_AOseg, max_alphaseg, max_betaseg, n_basis    
 
 c------------------------------------------------------------------------------------------  
 c                  Parameters read from ZMAT   
@@ -356,7 +357,11 @@ c---------------------------------------------------------------------------
 
 c------------------------------------------------------------------------------------------  
 c                              Set the index segment ranges  
+c     Also determine maximum segment sizes so static scratch arrays can be defined. 
 c------------------------------------------------------------------------------------------  
+      max_AOseg    = 0 
+      max_alphaseg = 0 
+      max_betaseg  = 0 
 
       norbs = 1 
       dd(norbs) = segs(1) 
@@ -364,9 +369,6 @@ c-------------------------------------------------------------------------------
          norbs = norbs + 1 
          dd(norbs) = segs(i) - segs(i-1)  
       enddo 
-c     do i = 1, norbs 
-c        write(6,*) ' NORBS DD :', norbs, dd(i) 
-c     enddo 
       call set_aoindex_info(norbs,dd)              ! Atomic orbital segments 
       sDim1(1) = norbs     
       do i = 1, sDim1(1)
@@ -395,9 +397,9 @@ c     enddo
          enddo 
       enddo 
 
-c     do i = 1, norbs 
-c        write(6,*) ' NORBS DD :', norbs, dd(i) 
-c     enddo 
+      do i = 1, norbs 
+         write(6,*) ' NORBS DD :', norbs, dd(i) 
+      enddo 
 
       call set_moindex_info(norbs,dd)              ! MO index ranges. BOTH occupied and virtual 
       sDim1(1) = norbs     
@@ -431,9 +433,9 @@ c     enddo
          enddo 
       enddo 
 
-c     do i = 1, norbs 
-c        write(6,*) ' NORBS DD :', norbs, dd(i) 
-c     enddo 
+      do i = 1, norbs 
+         write(6,*) ' NORBS DD :', norbs, dd(i) 
+      enddo 
 
       call set_mobindex_info(norbs,dd)              ! MO beta index ranges. BOTH occupied and virtual 
       sDim1(1) = norbs     
@@ -619,12 +621,13 @@ c     call set_predefined_scalar_array('oed_ovl'//C_NULL_CHAR, 2, sDim2, sVals)
       write(6,*) ' ALPHAS into SVALS ' 
       do i = 1, sDim1(1)
          sVals1(i) = talpha(i)
-         write(6,*) i, talpha(i), sVals1(i) 
+c        write(6,*) i, talpha(i), sVals1(i) 
       enddo
       call set_predefined_scalar_array('alphas'//C_NULL_CHAR,
      *                                           1,sDim1,sVals1)
 
       sDim1(1) = ntot_pcoef
+      write(6,*) ' PCOEFFS into SVALS ' 
       do i = 1, sDim1(1)
          sVals1(i) = tpcoeff(i)
       enddo
@@ -789,8 +792,8 @@ c Set the parameters defining the fragment calculation.
 c *************************************************************************
       if (.not. frag_calc) nfrags = 0  
       call set_constant('nfrags'//C_NULL_CHAR,nfrags) 
-      call set_scalar('nfrags'//C_NULL_CHAR,nfrags) 
-      call set_constant('r_thresh'//C_NULL_CHAR,r_thresh) 
+C      call set_scalar('nfrags'//C_NULL_CHAR,nfrags) 
+C      call set_constant('r_thresh'//C_NULL_CHAR,r_thresh) 
       call set_scalar('r_thresh'//C_NULL_CHAR,r_thresh) 
 
       write(6,*) ' NFRAGS = ', nfrags 
@@ -869,6 +872,37 @@ c     enddo
           n_b_virt = n_b_virt + n_bvirt(i) 
        enddo 
 
+
+       do i = 1, nfrags 
+         n_basis = 0  
+         do m = 1, nshells  
+         do n = 1, natoms_frag(i)  
+            if (m .gt. 1) then 
+               if(atom(m) .eq. watom_frag(i,n)) n_basis = n_basis + 
+     *                           end_nfps(m) - end_nfps(m-1)   
+            else 
+               if(atom(m) .eq. watom_frag(i,n)) n_basis = n_basis + 
+     *                           end_nfps(m)    
+            endif 
+         enddo 
+         enddo 
+         if (n_basis .gt. max_aoseg) max_aoseg = n_basis 
+      enddo 
+
+
+c Set the maximum fragment size. 
+c      do i = 1, nfrags 
+
+c         do j = 1, natoms_frag(i)  
+c         enddo 
+
+c         if ((n_aocc(i)+n_avirt(i)) .gt. max_aoseg) 
+c    *        max_aoseg = n_aocc(i) + n_avirt(i)  
+c      enddo 
+
+       max_alphaseg = max_aoseg 
+       max_betaseg  = max_aoseg 
+
       sDim1(1) = nsegs     
       write(6,*) ' AO_SEGS = ', sDim1(1)  
       call set_predefined_integer_array('w_frag_ao'//C_NULL_CHAR,1,
@@ -911,6 +945,18 @@ c     enddo
 c *************************************************************************
 c Done Setting the parameters defining the fragment calculation. 
 c *************************************************************************
+
+c *************************************************************************
+c Set maximum segment sizes so that scratch arrays can be set up  
+c *************************************************************************
+
+      write(6,*) 'Maximimum segments' 
+      write(6,*) ' AO :', max_AOseg 
+      write(6,*) ' Alpha :', max_alphaseg 
+      write(6,*) ' betaa :', max_betaseg 
+      call set_constant('max_aoseg'//C_NULL_CHAR, max_AOseg)       ! Maximum AO segment  
+      call set_constant('max_alphaseg'//C_NULL_CHAR, max_alphaseg) ! Maximum alpha segment  
+      call set_constant('max_betaseg'//C_NULL_CHAR, max_betaseg)   ! Maximum beta segment  
 c 
 
       call finalize_setup()

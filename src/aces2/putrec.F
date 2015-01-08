@@ -48,7 +48,8 @@ c INTERNAL VARIABLES
       character*80 szJOBARC
       integer       iJOBARC
       integer iRecNdx
-      integer iRec, iBufNdx, iTmp
+      integer*8  iBufNdx
+      integer*8 iTmp, irec 
       integer iRec0, iRec1
       integer nLeft, nPut, iOff
       integer iStat, i
@@ -240,8 +241,28 @@ c   o JOBARC I/O error
       print *, '         record name = "',szRecName,'"'
       print '(/)'
 c      call aces_io_error('PUTREC',_JA_UNIT,iStat)
-      call abort_job()
+c Since we want to remove JOBARC remove this to allow larger cluster
+c jobs to proceed VFL 8/29/2014  
+       write(6,*) iFlag
+       write(6,*) szArchive
+       write(6,*) szRecName
+       write(6,*) iRecLen
+       write(6,*) 'RECORD = ', iRec 
+
+       write(6,*) iRecNdx
+       write(6,*) rloc(iRecNdx)
+       write(6,*) irecwd  
+       write(6,*) iBufNdx 
+       write(6,*) iTmp    
+       write(6,*) iRec    
+       write(6,*) iBufNdx 
+
+       call abort_job()
 
 c     end subroutine putrec
       end
 
+c     iBufNdx = rloc(iRecNdx)
+c     iTmp    = (iBufNdx-1)/irecwd
+c     iRec    = 1       + iTmp
+c     iBufNdx = iBufNdx - iTmp*irecwd

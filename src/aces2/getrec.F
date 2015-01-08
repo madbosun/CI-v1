@@ -54,8 +54,8 @@ c EXTERNAL FUNCTIONS
 c INTERNAL VARIABLES
       character*80 szJOBARC
       integer       iJOBARC
-      integer iRecNdx
-      integer iRec, iBufNdx, iTmp
+      integer*8 iRecNdx
+      integer*8 iRec, iBufNdx, iTmp
       integer nLeft, nGet, iOff
       integer iStat, i
       integer*8 iBuf(_JA_RECWD)

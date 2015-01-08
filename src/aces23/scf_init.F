@@ -179,6 +179,8 @@ c-------------------------------------------------------------------------
 c   Write the values to JOBARC.
 c-------------------------------------------------------------------------
 
+c VFL 8/29/2014 Skip as not needed ??? 
+
       call iputrec(1, 'JOBARC', 'OCCUPYA0', 1, nalpha_occupied)
       call iputrec(1, 'JOBARC', 'OCCUPYB0', 1, nbeta_occupied)
 

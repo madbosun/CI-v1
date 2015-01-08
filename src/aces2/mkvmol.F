@@ -496,6 +496,9 @@ c      Read (LuZ, '(A)', ERR=8500, END=8510) Wrk
 C      Read (LuZ, '(A)', ERR=8500, END=8510) Wrk
 C
 C Now write the "real" input.
+      do k = 1, natoms 
+        write(6,*) ' VFL :',k,IAtnum(k)
+      enddo 
 C
       IINFIL=0
       SHOFFSET(1)=1
@@ -521,6 +524,7 @@ c7001   Format(F10.1,I5,$)
        IF(IATOM.GT.2)IATTYP=2
        IF(IATOM.GT.10)IATTYP=3
        IF(GENBAS)THEN
+        write(6,*) ' Nstart :',nstart,nord(nstart),IAtnum(Nord(NStart))
         CALL RDBAS(SCRBAS,0,IFLAGS(64+IATTYP),LUVMOL,
      &             IntTyp,NullSt,IAtnum(Nord(NStart)),
      &             Nord(MxAtms+I),seward,.false.,13)
