@@ -795,6 +795,7 @@ c *************************************************************************
 C      call set_scalar('nfrags'//C_NULL_CHAR,nfrags) 
 C      call set_constant('r_thresh'//C_NULL_CHAR,r_thresh) 
       call set_scalar('r_thresh'//C_NULL_CHAR,r_thresh) 
+      call set_scalar('elst_thresh'//C_NULL_CHAR,elst_thresh) 
 
       write(6,*) ' NFRAGS = ', nfrags 
       if (frag_calc) then 
