@@ -397,9 +397,9 @@ c-------------------------------------------------------------------------------
          enddo 
       enddo 
 
-      do i = 1, norbs 
-         write(6,*) ' NORBS DD :', norbs, dd(i) 
-      enddo 
+C      do i = 1, norbs 
+C         write(6,*) ' NORBS DD :', norbs, dd(i) 
+C      enddo 
 
       call set_moindex_info(norbs,dd)              ! MO index ranges. BOTH occupied and virtual 
       sDim1(1) = norbs     
@@ -509,7 +509,7 @@ c-------------------------------------------------------------------------------
       call set_constant('fromvar'//C_NULL_CHAR, nd)      ! ????  
 
       val0 = eom_tol
-      call set_constant('eom_tol'//C_NULL_CHAR, val0)     ! eom convergence threshold
+      call set_scalar('eom_tol'//C_NULL_CHAR, val0)     ! eom convergence threshold
       val0 = eom_roots
       call set_constant('eom_roots'//C_NULL_CHAR, val0)   ! number of EOM roots
       val0 = eom_roots*3
