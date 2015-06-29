@@ -515,6 +515,15 @@ c-------------------------------------------------------------------------------
       val0 = eom_roots*3
       call set_constant('eom_subspc'//C_NULL_CHAR, val0)  ! size of davidson subspace collapse 
 
+      val0 = 1 ! segment start for fragment 1
+      call set_constant('frag1_baocc'//C_NULL_CHAR, val0)     ! Beginning occupied segment  
+      val0 = n_aocc(1) ! segment end for fragment 1
+      call set_constant('frag1_eaocc'//C_NULL_CHAR, val0)     ! Ending occupied  segment 
+      val0 = nafocc + 1 
+      call set_constant('frag1_bavirt'//C_NULL_CHAR, val0)   ! Beginning alpha virtual segment  
+      val0 = nafocc + n_avirt(1)
+      call set_constant('frag1_eavirt'//C_NULL_CHAR, val0)   ! Ending alpha virtual segment  
+
 
       write(6,*) ' Done setting integer constants ' 
 
